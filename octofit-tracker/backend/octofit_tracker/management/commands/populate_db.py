@@ -1,6 +1,5 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
-from djongo import models
 
 from octofit_tracker.models import Team, Activity, Leaderboard, Workout
 
@@ -22,9 +21,9 @@ class Command(BaseCommand):
 
         # Create users
         ironman = User.objects.create_user(username='ironman', email='ironman@marvel.com', password='password', team=marvel)
-        captain = User.objects.create_user(username='captainamerica', email='cap@marvel.com', password='password', team=marvel)
+        User.objects.create_user(username='captainamerica', email='cap@marvel.com', password='password', team=marvel)
         batman = User.objects.create_user(username='batman', email='batman@dc.com', password='password', team=dc)
-        superman = User.objects.create_user(username='superman', email='superman@dc.com', password='password', team=dc)
+        User.objects.create_user(username='superman', email='superman@dc.com', password='password', team=dc)
 
         # Create activities
         Activity.objects.create(user=ironman, type='run', duration=30, distance=5)
