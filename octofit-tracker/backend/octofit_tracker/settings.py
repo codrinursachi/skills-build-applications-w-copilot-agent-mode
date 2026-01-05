@@ -1,5 +1,3 @@
-# Custom user model
-AUTH_USER_MODEL = 'octofit_tracker.User'
 """
 Django settings for octofit_tracker project.
 
@@ -13,6 +11,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+
+# Custom user model
+AUTH_USER_MODEL = 'octofit_tracker.User'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,12 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-q5#&)^#mniz$(gm4g9j8bh1q*d&pg_-p=b!c7j+e^h08si+ff='
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-q5#&)^#mniz$(gm4g9j8bh1q*d&pg_-p=b!c7j+e^h08si+ff=')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-import os
 CODESPACE_NAME = os.environ.get('CODESPACE_NAME')
 codespace_host = f"{CODESPACE_NAME}-8000.app.github.dev" if CODESPACE_NAME else None
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
@@ -130,16 +131,38 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
 
 # CORS settings
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+if CODESPACE_NAME:
+    CORS_ALLOWED_ORIGINS.append(f"https://{CODESPACE_NAME}-3000.app.github.dev")
+
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = ['*']
-CORS_ALLOW_METHODS = ['*']
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
